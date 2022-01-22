@@ -5,6 +5,9 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.view.View;
+import android.view.Window;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,11 +26,12 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity{
     private final int REQUEST_PERMISSIONS_REQUEST_CODE = 1;
-    private MapView map = null;
+    private MapView map;
     private MyLocationNewOverlay mLocationOverlay;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        getSupportActionBar().hide();
         super.onCreate(savedInstanceState);
 
         //handle permissions first, before map is created. not depicted here
@@ -71,6 +75,13 @@ public class MainActivity extends AppCompatActivity{
         mLocationOverlay.enableFollowLocation();
 
         setCenterInMyCurrentLocation();
+
+        Button start_button = (Button) findViewById(R.id.start_button);
+        start_button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+
+            }
+        });
     }
 
     @Override
