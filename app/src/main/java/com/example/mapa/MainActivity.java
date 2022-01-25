@@ -8,6 +8,8 @@ import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.Chronometer;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,6 +25,7 @@ import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity{
     private final int REQUEST_PERMISSIONS_REQUEST_CODE = 1;
@@ -31,7 +34,7 @@ public class MainActivity extends AppCompatActivity{
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        getSupportActionBar().hide();
+        Objects.requireNonNull(getSupportActionBar()).hide();
         super.onCreate(savedInstanceState);
 
         //handle permissions first, before map is created. not depicted here
@@ -49,7 +52,7 @@ public class MainActivity extends AppCompatActivity{
         //inflate and create the map
         setContentView(R.layout.activity_main);
 
-        map = (MapView) findViewById(R.id.map);
+        map = findViewById(R.id.map);
         map.setTileSource(TileSourceFactory.MAPNIK);
 
         requestPermissionsIfNecessary(new String[] {
@@ -66,7 +69,7 @@ public class MainActivity extends AppCompatActivity{
         map.setMultiTouchControls(true);
 
         IMapController mapController = map.getController();
-        mapController.setZoom(9.5);
+        mapController.setZoom(12.5);
 
         this.mLocationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(ctx),map);
         map.getOverlays().add(mLocationOverlay);
@@ -76,11 +79,15 @@ public class MainActivity extends AppCompatActivity{
 
         setCenterInMyCurrentLocation();
 
-        Button start_button = (Button) findViewById(R.id.start_button);
-        start_button.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
+        Button start_button = findViewById(R.id.start_button);
+        LinearLayout topBar = findViewById(R.id.topBar);
+        Chronometer chrono = findViewById(R.id.textTime);
 
-            }
+        start_button.setOnClickListener(v -> {
+            topBar.setVisibility(View.VISIBLE);
+            chrono.start();
+            start_button.setText("Stop");
+            start_button.setOnClickListener(view -> chrono.stop());
         });
     }
 

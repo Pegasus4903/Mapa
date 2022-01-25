@@ -7,6 +7,7 @@
     android:layout_height="fill_parent">
 
     <LinearLayout
+        android:id="@+id/topBar"
         android:layout_width="fill_parent"
         android:layout_height="117dp"
         android:baselineAligned="false"
@@ -24,7 +25,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/textTime"
+                android:id="@+id/titleTime"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
@@ -34,7 +35,7 @@
                 android:textStyle="bold" />
 
             <Chronometer
-                android:id="@+id/chronometer"
+                android:id="@+id/textTime"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
@@ -57,7 +58,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/distance_Title"
+                android:id="@+id/titleDistance"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
@@ -67,7 +68,7 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/distance"
+                android:id="@+id/textDistance"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
