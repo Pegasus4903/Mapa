@@ -68,16 +68,14 @@ public class MainActivity extends AppCompatActivity{
                 Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.ACCESS_WIFI_STATE
         });
-        map.setMultiTouchControls(true);
 
         IMapController mapController = map.getController();
-        mapController.setZoom(12.5);
+        mapController.setZoom(18.8);
 
         this.mLocationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(ctx),map);
         map.getOverlays().add(mLocationOverlay);
         mLocationOverlay.enableFollowLocation();
         mLocationOverlay.enableMyLocation();
-        mLocationOverlay.enableFollowLocation();
 
         setCenterInMyCurrentLocation();
 
