@@ -16,6 +16,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.google.android.material.appbar.AppBarLayout;
+
 import org.osmdroid.api.IMapController;
 import org.osmdroid.config.Configuration;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
@@ -80,14 +82,19 @@ public class MainActivity extends AppCompatActivity{
         setCenterInMyCurrentLocation();
 
         Button start_button = findViewById(R.id.start_button);
-        LinearLayout topBar = findViewById(R.id.topBar);
+        AppBarLayout topBar = findViewById(R.id.topBar);
         Chronometer chrono = findViewById(R.id.textTime);
 
         start_button.setOnClickListener(v -> {
-            topBar.setVisibility(View.VISIBLE);
-            chrono.start();
-            start_button.setText("Stop");
-            start_button.setOnClickListener(view -> chrono.stop());
+            if(start_button.getText().equals("Stop")){
+                topBar.setVisibility(View.VISIBLE);
+                chrono.start();
+            }else{
+                if(start_button.getText().equals("Start")){
+                    topBar.setVisibility(View.INVISIBLE);
+                    chrono.stop();
+                }
+            }
         });
     }
 

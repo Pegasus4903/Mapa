@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Mapa</string>
     <string name="start_button">Start</string>
+    <string name="stop_button">Stop</string>
     <string name="time_Title">Time : </string>
     <string name="distance_Title">Distance : </string>
 </resources>
