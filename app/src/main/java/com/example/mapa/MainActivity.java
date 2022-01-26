@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -79,16 +80,16 @@ public class MainActivity extends AppCompatActivity{
 
         setCenterInMyCurrentLocation();
 
-        Button start_button = findViewById(R.id.start_button);
+        ToggleButton start_button = findViewById(R.id.start_button);
         AppBarLayout topBar = findViewById(R.id.topBar);
         Chronometer chrono = findViewById(R.id.textTime);
 
         start_button.setOnClickListener(v -> {
-            if(start_button.getText().equals("Stop")){
+            if(start_button.isChecked() == false){
                 topBar.setVisibility(View.VISIBLE);
                 chrono.start();
             }else{
-                if(start_button.getText().equals("Start")){
+                if(start_button.isChecked()){
                     topBar.setVisibility(View.INVISIBLE);
                     chrono.stop();
                 }
