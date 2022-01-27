@@ -3,6 +3,10 @@ package com.example.mapa;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.View;
@@ -13,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -24,16 +29,18 @@ import org.osmdroid.config.Configuration;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
+import org.osmdroid.views.overlay.Polyline;
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends AppCompatActivity implements LocationListener{
     private final int REQUEST_PERMISSIONS_REQUEST_CODE = 1;
     private MapView map;
     private MyLocationNewOverlay mLocationOverlay;
+    private GeoPoint currentPoint = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -73,21 +80,28 @@ public class MainActivity extends AppCompatActivity{
         IMapController mapController = map.getController();
         mapController.setZoom(18.8);
 
-        this.mLocationOverlay = new MyLocationNewOverlay(new GpsMyLocationProvider(ctx),map);
+        GpsMyLocationProvider provider = new GpsMyLocationProvider(ctx);
+        provider.addLocationSource(LocationManager.NETWORK_PROVIDER);
+        this.mLocationOverlay = new MyLocationNewOverlay(provider,map);
         map.getOverlays().add(mLocationOverlay);
         mLocationOverlay.enableFollowLocation();
         mLocationOverlay.enableMyLocation();
 
-        setCenterInMyCurrentLocation();
-
         ToggleButton start_button = findViewById(R.id.start_button);
         AppBarLayout topBar = findViewById(R.id.topBar);
         Chronometer chrono = findViewById(R.id.textTime);
+        Polyline poly = new Polyline(map);
+        poly.setColor(Color.BLUE);
+        map.getOverlays().add(poly);
 
         start_button.setOnClickListener(v -> {
             if(start_button.isChecked() == false){
                 topBar.setVisibility(View.VISIBLE);
                 chrono.start();
+                while (start_button.isChecked() == false){
+                    poly.addPoint(currentPoint);
+                }
+
             }else{
                 if(start_button.isChecked()){
                     topBar.setVisibility(View.INVISIBLE);
@@ -149,11 +163,8 @@ public class MainActivity extends AppCompatActivity{
         }
     }
 
-    private void setCenterInMyCurrentLocation() {
-        if (mLocationOverlay != null) {
-            map.getController().setCenter(mLocationOverlay.getMyLocation());
-        } else {
-            Toast.makeText(this, "Getting current location", Toast.LENGTH_SHORT).show();
-        }
+    @Override
+    public void onLocationChanged(@NonNull Location location) {
+        currentPoint = new GeoPoint(location.getLatitude(), location.getLongitude(), 0);
     }
 }
