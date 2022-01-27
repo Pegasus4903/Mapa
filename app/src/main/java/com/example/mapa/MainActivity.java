@@ -10,11 +10,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.View;
-import android.view.Window;
-import android.widget.Button;
 import android.widget.Chronometer;
-import android.widget.LinearLayout;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
@@ -39,7 +35,6 @@ import java.util.Objects;
 public class MainActivity extends AppCompatActivity implements LocationListener{
     private final int REQUEST_PERMISSIONS_REQUEST_CODE = 1;
     private MapView map;
-    private MyLocationNewOverlay mLocationOverlay;
     private GeoPoint currentPoint = null;
 
     @Override
@@ -82,7 +77,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener{
 
         GpsMyLocationProvider provider = new GpsMyLocationProvider(ctx);
         provider.addLocationSource(LocationManager.NETWORK_PROVIDER);
-        this.mLocationOverlay = new MyLocationNewOverlay(provider,map);
+        MyLocationNewOverlay mLocationOverlay = new MyLocationNewOverlay(provider, map);
         map.getOverlays().add(mLocationOverlay);
         mLocationOverlay.enableFollowLocation();
         mLocationOverlay.enableMyLocation();
@@ -95,10 +90,10 @@ public class MainActivity extends AppCompatActivity implements LocationListener{
         map.getOverlays().add(poly);
 
         start_button.setOnClickListener(v -> {
-            if(start_button.isChecked() == false){
+            if(!start_button.isChecked()){
                 topBar.setVisibility(View.VISIBLE);
                 chrono.start();
-                while (start_button.isChecked() == false){
+                while (!start_button.isChecked()){
                     poly.addPoint(currentPoint);
                 }
 
@@ -132,7 +127,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener{
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         ArrayList<String> permissionsToRequest = new ArrayList<>();
         for (int i = 0; i < grantResults.length; i++) {
