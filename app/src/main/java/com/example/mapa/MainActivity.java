@@ -12,6 +12,7 @@ import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.Chronometer;
+import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
@@ -106,7 +107,10 @@ public class MainActivity extends AppCompatActivity {
                     poly.addPoint(newPoint);
                     map.invalidate();
 
-
+                    TextView textDistance = findViewById(R.id.textDistance);
+                    double distance = poly.getDistance();
+                    int distanceRound = (int)distance;
+                    textDistance.setText(distanceRound + " m");
                 }
             }
         };
