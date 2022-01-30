@@ -15,6 +15,7 @@ import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.solver.state.State;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -30,12 +31,15 @@ import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
-public class MainActivity extends AppCompatActivity implements LocationListener{
+public class MainActivity extends AppCompatActivity {
     private final int REQUEST_PERMISSIONS_REQUEST_CODE = 1;
     private MapView map;
-    private GeoPoint currentPoint = null;
+    private LocationListener listener;
+    private ArrayList<GeoPoint> points;
+    private boolean enablePolyline = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -47,6 +51,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener{
         //load/initialize the osmdroid configuration, this can be done
         Context ctx = getApplicationContext();
         Configuration.getInstance().load(ctx, PreferenceManager.getDefaultSharedPreferences(ctx));
+        Configuration.getInstance().setUserAgentValue(BuildConfig.APPLICATION_ID);
         //setting this before the layout is inflated is a good idea
         //it 'should' ensure that the map has a writable location for the map cache, even without permissions
         //if no tiles are displayed, you can try overriding the cache path using Configuration.getInstance().setCachePath
@@ -60,7 +65,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener{
         map = findViewById(R.id.map);
         map.setTileSource(TileSourceFactory.MAPNIK);
 
-        requestPermissionsIfNecessary(new String[] {
+        requestPermissionsIfNecessary(new String[]{
                 // if you need to show the current location, uncomment the line below
                 // Manifest.permission.ACCESS_FINE_LOCATION,
                 // WRITE_EXTERNAL_STORAGE is required in order to show the map
@@ -75,6 +80,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener{
         IMapController mapController = map.getController();
         mapController.setZoom(18.8);
 
+
         GpsMyLocationProvider provider = new GpsMyLocationProvider(ctx);
         provider.addLocationSource(LocationManager.NETWORK_PROVIDER);
         MyLocationNewOverlay mLocationOverlay = new MyLocationNewOverlay(provider, map);
@@ -85,22 +91,52 @@ public class MainActivity extends AppCompatActivity implements LocationListener{
         ToggleButton start_button = findViewById(R.id.start_button);
         AppBarLayout topBar = findViewById(R.id.topBar);
         Chronometer chrono = findViewById(R.id.textTime);
-        Polyline poly = new Polyline(map);
+
+        points = new ArrayList<GeoPoint>();
+        Polyline poly = new Polyline();
         poly.setColor(Color.BLUE);
+        poly.setWidth(25);
         map.getOverlays().add(poly);
+        map.invalidate();
+
+        LocationManager lm = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+
+        listener = new LocationListener() {
+            @Override
+            public void onLocationChanged(@NonNull Location location) {
+                if(enablePolyline){
+                    GeoPoint newPoint = new GeoPoint(location.getLatitude(), location.getLongitude(), 0);
+                    poly.addPoint(newPoint);
+                    map.invalidate();
+                }
+            }
+        };
+
+        lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0f, listener);
+        lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 0f, listener);
 
         start_button.setOnClickListener(v -> {
-            if(!start_button.isChecked()){
+            if (!start_button.isChecked()) {
                 topBar.setVisibility(View.VISIBLE);
                 chrono.start();
-                while (!start_button.isChecked()){
-                    poly.addPoint(currentPoint);
-                }
+                enablePolyline = true;
 
             }else{
                 if(start_button.isChecked()){
                     topBar.setVisibility(View.INVISIBLE);
                     chrono.stop();
+                    enablePolyline = false;
                 }
             }
         });
@@ -156,10 +192,5 @@ public class MainActivity extends AppCompatActivity implements LocationListener{
                     permissionsToRequest.toArray(new String[0]),
                     REQUEST_PERMISSIONS_REQUEST_CODE);
         }
-    }
-
-    @Override
-    public void onLocationChanged(@NonNull Location location) {
-        currentPoint = new GeoPoint(location.getLatitude(), location.getLongitude(), 0);
     }
 }
