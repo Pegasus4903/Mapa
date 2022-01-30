@@ -8,6 +8,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.Chronometer;
@@ -24,6 +25,7 @@ import org.osmdroid.api.IMapController;
 import org.osmdroid.config.Configuration;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
+import org.osmdroid.views.CustomZoomButtonsController;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Polyline;
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
@@ -38,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
     private MapView map;
     private LocationListener listener;
     private boolean enablePolyline = false;
+    private long timeWhenStopped;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -83,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
 
         Polyline poly = new Polyline();
         poly.setColor(Color.BLUE);
-        poly.setWidth(25);
+        poly.setWidth(30);
         map.getOverlays().add(poly);
         map.invalidate();
 
@@ -102,6 +105,8 @@ public class MainActivity extends AppCompatActivity {
                     GeoPoint newPoint = new GeoPoint(location.getLatitude(), location.getLongitude(), 0);
                     poly.addPoint(newPoint);
                     map.invalidate();
+
+
                 }
             }
         };
@@ -112,17 +117,27 @@ public class MainActivity extends AppCompatActivity {
         start_button.setOnClickListener(v -> {
             if (!start_button.isChecked()) {
                 topBar.setVisibility(View.VISIBLE);
-                chrono.start();
+                StartChrono(chrono);
                 enablePolyline = true;
 
             }else{
                 if(start_button.isChecked()){
                     topBar.setVisibility(View.INVISIBLE);
-                    chrono.stop();
+                    StopChrono(chrono);
                     enablePolyline = false;
                 }
             }
         });
+    }
+
+    private void StopChrono(Chronometer chrono) {
+        chrono.stop();
+        timeWhenStopped = chrono.getBase() - SystemClock.elapsedRealtime();
+    }
+
+    private void StartChrono(Chronometer chrono) {
+        chrono.setBase(SystemClock.elapsedRealtime() + timeWhenStopped);
+        chrono.start();
     }
 
     @Override
