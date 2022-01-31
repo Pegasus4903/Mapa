@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         GpsMyLocationProvider provider = new GpsMyLocationProvider(ctx);
-        provider.addLocationSource(LocationManager.NETWORK_PROVIDER);
+        provider.addLocationSource(LocationManager.GPS_PROVIDER);
         MyLocationNewOverlay mLocationOverlay = new MyLocationNewOverlay(provider, map);
         map.getOverlays().add(mLocationOverlay);
         mLocationOverlay.enableFollowLocation();
@@ -116,7 +116,6 @@ public class MainActivity extends AppCompatActivity {
         };
 
         lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0f, listener);
-        lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 0f, listener);
 
         start_button.setOnClickListener(v -> {
             if (!start_button.isChecked()) {
