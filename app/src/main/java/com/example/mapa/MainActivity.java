@@ -26,12 +26,10 @@ import org.osmdroid.api.IMapController;
 import org.osmdroid.config.Configuration;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
-import org.osmdroid.views.CustomZoomButtonsController;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Polyline;
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
-import org.osmdroid.views.overlay.mylocation.SimpleLocationOverlay;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -39,6 +37,8 @@ import java.util.Objects;
 public class MainActivity extends AppCompatActivity {
     private final int REQUEST_PERMISSIONS_REQUEST_CODE = 1;
     private MapView map;
+    private MyLocationNewOverlay mLocationOverlay;
+    private LocationManager lm;
     private LocationListener listener;
     private boolean enablePolyline = false;
     private long timeWhenStopped;
@@ -48,9 +48,8 @@ public class MainActivity extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).hide();
         super.onCreate(savedInstanceState);
 
-
-        Context ctx = getApplicationContext();
-        Configuration.getInstance().load(ctx, PreferenceManager.getDefaultSharedPreferences(ctx));
+        Configuration.getInstance().load(getApplicationContext(),
+                PreferenceManager.getDefaultSharedPreferences(getApplicationContext()));
         Configuration.getInstance().setUserAgentValue(BuildConfig.APPLICATION_ID);
 
         setContentView(R.layout.activity_main);
@@ -74,9 +73,9 @@ public class MainActivity extends AppCompatActivity {
         mapController.setZoom(18.8);
 
 
-        GpsMyLocationProvider provider = new GpsMyLocationProvider(ctx);
+        GpsMyLocationProvider provider = new GpsMyLocationProvider(getApplicationContext());
         provider.addLocationSource(LocationManager.GPS_PROVIDER);
-        MyLocationNewOverlay mLocationOverlay = new MyLocationNewOverlay(provider, map);
+        mLocationOverlay = new MyLocationNewOverlay(provider, map);
         map.getOverlays().add(mLocationOverlay);
         mLocationOverlay.enableFollowLocation();
         mLocationOverlay.enableMyLocation();
@@ -91,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
         map.getOverlays().add(poly);
         map.invalidate();
 
-        LocationManager lm = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        lm = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,
