@@ -23,6 +23,7 @@ Please create an issue in the respective tab if you have some issue with the app
 ## Authors
 
 * pegasus4903
+* Gravity_ (for the logo)
 
 ## Version History
 
