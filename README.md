@@ -27,6 +27,7 @@ Please create an issue in the respective tab if you have some issue with the app
 
 ## Version History
 
+* Release v1.1.0
 * Release v1.0.0
 * Pre-release-0.1
 
