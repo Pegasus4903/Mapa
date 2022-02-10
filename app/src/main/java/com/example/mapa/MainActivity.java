@@ -45,7 +45,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        Objects.requireNonNull(getSupportActionBar()).hide();
         super.onCreate(savedInstanceState);
 
         Configuration.getInstance().load(getApplicationContext(),

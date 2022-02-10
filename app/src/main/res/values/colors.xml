@@ -6,4 +6,6 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="button_Color">#31e02b</color>
+    <color name="title_color">#5a5a5a</color>
+    <color name="ic_launcher_background">#2D836B</color>
 </resources>

@@ -31,22 +31,20 @@
 
                 <TextView
                     android:id="@+id/titleTime"
+                    android:theme="@style/topbarStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal"
                     android:text="@string/time_Title"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                    android:textColor="@color/white"
-                    android:textStyle="bold" />
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
 
                 <Chronometer
                     android:id="@+id/textTime"
+                    android:theme="@style/topbarStyle"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-                    android:textColor="@color/white"
-                    android:textStyle="bold" />
+                    android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
 
             </LinearLayout>
 
@@ -64,21 +62,19 @@
 
                 <TextView
                     android:id="@+id/titleDistance"
+                    android:theme="@style/topbarStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal"
                     android:text="@string/distance_Title"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                    android:textColor="@color/white"
-                    android:textStyle="bold" />
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
 
                 <TextView
                     android:id="@+id/textDistance"
+                    android:theme="@style/topbarStyle"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:textColor="@color/white"
-                    android:textStyle="bold"
                     android:textSize="35dp"/>
             </LinearLayout>
         </LinearLayout>
