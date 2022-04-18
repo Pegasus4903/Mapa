@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.TextView;
 import android.widget.ToggleButton;
@@ -123,9 +124,10 @@ public class MainActivity extends AppCompatActivity {
 
             }else{
                 if(start_button.isChecked()){
-                    topBar.setVisibility(View.INVISIBLE);
                     StopChrono(chrono);
                     enablePolyline = false;
+                    Button button = findViewById(R.id.start_button);
+                    start_button.animate();
                 }
             }
         });

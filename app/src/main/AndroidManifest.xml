@@ -17,6 +17,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Mapa">
         <activity
+            android:name=".listSessionActivity"
+            android:exported="false" />
+        <activity
             android:name=".loadingActivity"
             android:exported="true">
             <intent-filter>
