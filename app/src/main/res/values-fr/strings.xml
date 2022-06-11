@@ -1,0 +1,7 @@
+<resources>
+    <string name="start_button">Commencer</string>
+    <string name="stop_button">Arrêter</string>
+    <string name="finish_button">Terminer</string>
+    <string name="time_Title">Temps : </string>
+    <string name="distance_Title">Distance : </string>
+</resources>
