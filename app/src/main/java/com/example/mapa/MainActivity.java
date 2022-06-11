@@ -1,30 +1,38 @@
 package com.example.mapa;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
+import android.transition.TransitionManager;
 import android.view.View;
+import android.view.ViewParent;
 import android.widget.Button;
 import android.widget.Chronometer;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
 import com.google.android.material.appbar.AppBarLayout;
 
 import org.osmdroid.api.IMapController;
+import org.osmdroid.bonuspack.routing.OSRMRoadManager;
+import org.osmdroid.bonuspack.routing.Road;
+import org.osmdroid.bonuspack.routing.RoadManager;
 import org.osmdroid.config.Configuration;
+import org.osmdroid.library.BuildConfig;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
@@ -33,16 +41,16 @@ import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 import java.util.ArrayList;
-import java.util.Objects;
+import java.util.Locale;
 
-public class MainActivity extends AppCompatActivity {
-    private final int REQUEST_PERMISSIONS_REQUEST_CODE = 1;
+public class MainActivity extends AppCompatActivity implements LocationListener {
     private MapView map;
     private MyLocationNewOverlay mLocationOverlay;
     private LocationManager lm;
-    private LocationListener listener;
     private boolean enablePolyline = false;
     private long timeWhenStopped;
+    private ArrayList<GeoPoint> geoPoints;
+    private RoadManager roadManager;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -50,24 +58,16 @@ public class MainActivity extends AppCompatActivity {
 
         Configuration.getInstance().load(getApplicationContext(),
                 PreferenceManager.getDefaultSharedPreferences(getApplicationContext()));
-        Configuration.getInstance().setUserAgentValue(BuildConfig.APPLICATION_ID);
+        Configuration.getInstance().setUserAgentValue("MapaUserAgent/1.0");
+        Configuration.getInstance().setDebugMode(true);
+
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
 
         setContentView(R.layout.activity_main);
 
         map = findViewById(R.id.map);
         map.setTileSource(TileSourceFactory.MAPNIK);
-
-        requestPermissionsIfNecessary(new String[]{
-                // if you need to show the current location, uncomment the line below
-                // Manifest.permission.ACCESS_FINE_LOCATION,
-                // WRITE_EXTERNAL_STORAGE is required in order to show the map
-                Manifest.permission.INTERNET,
-                Manifest.permission.ACCESS_NETWORK_STATE,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.ACCESS_COARSE_LOCATION,
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_WIFI_STATE
-        });
 
         IMapController mapController = map.getController();
         mapController.setZoom(18.8);
@@ -84,10 +84,8 @@ public class MainActivity extends AppCompatActivity {
         AppBarLayout topBar = findViewById(R.id.topBar);
         Chronometer chrono = findViewById(R.id.textTime);
 
-        Polyline poly = new Polyline();
-        poly.setColor(Color.BLUE);
-        poly.setWidth(30);
-        map.getOverlays().add(poly);
+        geoPoints = new ArrayList<>();
+        roadManager = new OSRMRoadManager(this, "MapaUserAgent/1.0");
         map.invalidate();
 
         lm = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
@@ -98,37 +96,32 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        listener = new LocationListener() {
-            @Override
-            public void onLocationChanged(@NonNull Location location) {
-                if(enablePolyline){
-                    GeoPoint newPoint = new GeoPoint(location.getLatitude(), location.getLongitude(), 0);
-                    poly.addPoint(newPoint);
-                    map.invalidate();
+        lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 3000, 10, this);
 
-                    TextView textDistance = findViewById(R.id.textDistance);
-                    double distance = poly.getDistance();
-                    int distanceRound = (int)distance;
-                    textDistance.setText(distanceRound + " m");
-                }
-            }
-        };
+        Button finishButton = findViewById(R.id.finishButton);
 
-        lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0f, listener);
+        //The code for the button is reversed because when launching the map it would display "off"
+        // instead of "on"
+        start_button.setOnCheckedChangeListener((compoundButton, isChecked) -> {
+            if(isChecked){
+                StopChrono(chrono);
+                enablePolyline = false;
+                ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) start_button.getLayoutParams();
+                params.horizontalBias = 0.3f;
+                start_button.setLayoutParams(params);
 
-        start_button.setOnClickListener(v -> {
-            if (!start_button.isChecked()) {
+                finishButton.setVisibility(View.VISIBLE);
+
+            }else{
                 topBar.setVisibility(View.VISIBLE);
                 StartChrono(chrono);
                 enablePolyline = true;
 
-            }else{
-                if(start_button.isChecked()){
-                    StopChrono(chrono);
-                    enablePolyline = false;
-                    Button button = findViewById(R.id.start_button);
-                    start_button.animate();
-                }
+                finishButton.setVisibility(View.GONE);
+
+                ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) start_button.getLayoutParams();
+                params.horizontalBias = 0.5f;
+                start_button.setLayoutParams(params);
             }
         });
     }
@@ -163,35 +156,21 @@ public class MainActivity extends AppCompatActivity {
         map.onPause();  //needed for compass, my location overlays, v6.0.0 and up
     }
 
+    @SuppressLint("DefaultLocale")
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        ArrayList<String> permissionsToRequest = new ArrayList<>();
-        for (int i = 0; i < grantResults.length; i++) {
-            permissionsToRequest.add(permissions[i]);
-        }
-        if (permissionsToRequest.size() > 0) {
-            ActivityCompat.requestPermissions(
-                    this,
-                    permissionsToRequest.toArray(new String[0]),
-                    REQUEST_PERMISSIONS_REQUEST_CODE);
-        }
-    }
+    public void onLocationChanged(@NonNull Location location) {
+        if(enablePolyline){
+            GeoPoint newPoint = new GeoPoint(location.getLatitude(), location.getLongitude(), 0);
+            geoPoints.add(newPoint);
+            Road road = roadManager.getRoad(geoPoints);
+            Polyline poly = RoadManager.buildRoadOverlay(road);
+            map.getOverlays().add(poly);
+            map.invalidate();
 
-    private void requestPermissionsIfNecessary(String[] permissions) {
-        ArrayList<String> permissionsToRequest = new ArrayList<>();
-        for (String permission : permissions) {
-            if (ContextCompat.checkSelfPermission(this, permission)
-                    != PackageManager.PERMISSION_GRANTED) {
-                // Permission is not granted
-                permissionsToRequest.add(permission);
-            }
-        }
-        if (permissionsToRequest.size() > 0) {
-            ActivityCompat.requestPermissions(
-                    this,
-                    permissionsToRequest.toArray(new String[0]),
-                    REQUEST_PERMISSIONS_REQUEST_CODE);
+            TextView textDistance = findViewById(R.id.textDistance);
+            double distance = poly.getDistance();
+            int distanceRound = (int)distance;
+            textDistance.setText(String.format("%d m", distanceRound));
         }
     }
 }
