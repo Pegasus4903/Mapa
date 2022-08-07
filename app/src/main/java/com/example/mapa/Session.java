@@ -15,12 +15,51 @@ public class Session {
     public int Id;
 
     @ColumnInfo(name = "Title")
-    public String Title;
+    private String Title;
     @ColumnInfo(name = "Distance")
-    public int Distance;
+    private int Distance;
     @ColumnInfo(name = "Time")
-    public int Time;
+    private int Time;
     @ColumnInfo(name = "Date_Session")
-    public Date DateSession;
+    private Date DateSession;
 
+    public int getId() {
+        return Id;
+    }
+
+    public void setId(int id) {
+        Id = id;
+    }
+
+    public String getTitle() {
+        return Title;
+    }
+
+    public void setTitle(String title) {
+        Title = title;
+    }
+
+    public int getDistance() {
+        return Distance;
+    }
+
+    public void setDistance(int distance) {
+        Distance = distance;
+    }
+
+    public int getTime() {
+        return Time;
+    }
+
+    public void setTime(int time) {
+        Time = time;
+    }
+
+    public Date getDateSession() {
+        return DateSession;
+    }
+
+    public void setDateSession(Date dateSession) {
+        DateSession = dateSession;
+    }
 }

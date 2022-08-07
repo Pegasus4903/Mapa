@@ -5,4 +5,7 @@
     <string name="finish_button">Finish</string>
     <string name="time_Title">Time : </string>
     <string name="distance_Title">Distance : </string>
+    <string name="dialog_title">Enter a title to your training session :</string>
+    <string name="dialog_save_button">Save</string>
+    <string name="dialog_cancel_button">Cancel</string>
 </resources>

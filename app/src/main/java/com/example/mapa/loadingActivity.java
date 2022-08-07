@@ -38,7 +38,7 @@ public class loadingActivity extends AppCompatActivity {
         });
 
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
-            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+            startActivity(new Intent(getApplicationContext(), listSessionActivity.class));
             finish();
         }, SPLASH_TIME_OUT);
     }

@@ -8,7 +8,7 @@ import androidx.room.RoomDatabase;
 import androidx.room.TypeConverter;
 import androidx.room.TypeConverters;
 
-@Database(entities = {Session.class}, version = 1, exportSchema = false)
+@Database(entities = {Session.class}, version = 3, exportSchema = false)
 @TypeConverters({TimestampConverter.class})
 public abstract class RoomDB extends RoomDatabase {
     private static RoomDB database;

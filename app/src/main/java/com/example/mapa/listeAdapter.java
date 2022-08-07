@@ -51,9 +51,9 @@ public class listeAdapter extends RecyclerView.Adapter<listeAdapter.ViewHolder> 
     public void onBindViewHolder(@NonNull final listeAdapter.ViewHolder holder, int position) {
         Session s = dataList.get(position);
         database = RoomDB.getInstance(context);
-        holder.titleSessionText.setText(s.Title);
-        holder.distanceSessionText.setText(s.Distance);
-        holder.dateSessionText.setText(s.DateSession.toString());
+        holder.titleSessionText.setText(s.getTitle());
+        holder.distanceSessionText.setText("Distance : " + String.valueOf(s.getDistance()));
+        holder.dateSessionText.setText(s.getDateSession().toString());
     }
 
     @Override

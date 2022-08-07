@@ -4,4 +4,7 @@
     <string name="finish_button">Terminer</string>
     <string name="time_Title">Temps : </string>
     <string name="distance_Title">Distance : </string>
+    <string name="dialog_title">Entrez un titre à votre session d\'entraînement :</string>
+    <string name="dialog_save_button">Sauvegarder</string>
+    <string name="dialog_cancel_button">Annuler</string>
 </resources>

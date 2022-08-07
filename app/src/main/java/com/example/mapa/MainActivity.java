@@ -2,7 +2,9 @@ package com.example.mapa;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -14,10 +16,13 @@ import android.preference.PreferenceManager;
 import android.transition.TransitionManager;
 import android.view.View;
 import android.view.ViewParent;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
@@ -41,6 +46,7 @@ import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements LocationListener {
@@ -51,6 +57,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     private long timeWhenStopped;
     private ArrayList<GeoPoint> geoPoints;
     private RoadManager roadManager;
+    private RoomDB database;
+    private int distanceRound;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -124,6 +132,62 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                 start_button.setLayoutParams(params);
             }
         });
+
+        finishButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                displayDialog();
+            }
+        });
+    }
+
+    private void displayDialog() {
+        database = RoomDB.getInstance(this);
+        // create dialog
+        final Dialog dialog=new Dialog(this);
+        // set content view
+        dialog.setContentView(R.layout.add_session_dialog);
+        //Initialize width
+        int width= WindowManager.LayoutParams.MATCH_PARENT;
+        //Initialize height
+        int height=WindowManager.LayoutParams.WRAP_CONTENT;
+        //Set layout
+        dialog.getWindow().setLayout(width,height);
+        //show dialog
+        dialog.show();
+
+        Button saveButton = dialog.findViewById(R.id.save_button);
+        Button cancelButton = dialog.findViewById(R.id.cancel_button);
+        EditText titreText = dialog.findViewById(R.id.edit_titre);
+
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(titreText.getText().toString().isEmpty()){
+                    Toast.makeText(MainActivity.this, "Please fill the title",
+                            Toast.LENGTH_SHORT).show();
+                }else{
+                    Session session = new Session();
+                    session.setTitle(titreText.getText().toString());
+                    session.setDistance(distanceRound);
+                    session.setTime((int)timeWhenStopped);
+                    session.setDateSession(new Date());
+
+                    database.sessionDao().insert(session);
+
+                    startActivity(new Intent(getApplicationContext(), listSessionActivity.class));
+                    finish();
+                }
+            }
+        });
+
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                titreText.setText("");
+                dialog.hide();
+            }
+        });
     }
 
     private void StopChrono(Chronometer chrono) {
@@ -169,7 +233,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
             TextView textDistance = findViewById(R.id.textDistance);
             double distance = poly.getDistance();
-            int distanceRound = (int)distance;
+            distanceRound = (int)distance;
             textDistance.setText(String.format("%d m", distanceRound));
         }
     }
