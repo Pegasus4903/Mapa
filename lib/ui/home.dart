@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 
 import '../data/database.dart';
 
@@ -33,10 +34,14 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: Column(
-          children: [Expanded(child: _buildSessionList(context, database))]),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => {Navigator.pushReplacementNamed(context, '/map')},
+      body: _buildSessionList(context, database),
+      floatingActionButton: Theme(
+        data: Theme.of(context)
+            .copyWith(splashColor: const Color.fromARGB(255, 22, 78, 62)),
+        child: FloatingActionButton(
+          onPressed: () {},
+          child: const Icon(Icons.add),
+        ),
       ),
     );
   }
@@ -62,28 +67,45 @@ StreamBuilder<List<Session>> _buildSessionList(
 
 Widget _listCardWidget(BuildContext context, Session session) {
   initializeDateFormatting(Localizations.localeOf(context).languageCode, null);
-  return Card(
-    child: Container(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: <Widget>[
-            Container(
+  return Slidable(
+    key: const ValueKey(0),
+    endActionPane: const ActionPane(motion: ScrollMotion(), children: [
+      SlidableAction(
+        // An action can be bigger than the others.d
+        onPressed: null,
+        backgroundColor: Colors.red,
+        foregroundColor: Colors.white,
+        icon: Icons.delete,
+      )
+    ]),
+    child: Card(
+      child: Container(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: <Widget>[
+              Container(
+                  padding: const EdgeInsets.all(3.0),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(session.title,
+                        style: Theme.of(context).textTheme.titleSmall),
+                  )),
+              Container(
                 padding: const EdgeInsets.all(3.0),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(session.title),
-                )),
-            Container(
-              padding: const EdgeInsets.all(3.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text("Distance : ${session.distance.toString()} m"),
-                  Text(DateFormat.yMd().format(session.dateSession)),
-                ],
-              ),
-            )
-          ],
-        )),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Distance : ${session.distance.toString()} m",
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                    Text(DateFormat.yMd().format(session.dateSession),
+                        style: Theme.of(context).textTheme.bodySmall),
+                  ],
+                ),
+              )
+            ],
+          )),
+    ),
   );
 }

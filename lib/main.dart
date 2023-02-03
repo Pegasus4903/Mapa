@@ -17,7 +17,11 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Mapa',
       theme: ThemeData(
-          primarySwatch: createMaterialColor(const Color(0xFF2D836B))),
+        primarySwatch: createMaterialColor(const Color(0xFF2D836B)),
+        textTheme: const TextTheme(
+            titleSmall: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w700),
+            bodySmall: TextStyle(fontSize: 16.0)),
+      ),
       routes: {
         '/': (context) => const HomePage(title: 'Mapa'),
         '/map': (context) => const LiveLocationPage(),
