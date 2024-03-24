@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-
-import '../data/database.dart';
+import 'package:mapa/data/Models.dart';
+import 'package:mapa/main.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key, required this.title});
@@ -16,16 +15,9 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final database = AppDatabase();
   @override
   void initState() {
     super.initState();
-    initialization();
-  }
-
-  void initialization() async {
-    await Future.delayed(const Duration(seconds: 1));
-    FlutterNativeSplash.remove();
   }
 
   @override
@@ -34,12 +26,14 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: _buildSessionList(context, database),
+      body: _buildSessionList(context),
       floatingActionButton: Theme(
         data: Theme.of(context)
             .copyWith(splashColor: const Color.fromARGB(255, 22, 78, 62)),
         child: FloatingActionButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.pushNamed(context, "/map");
+          },
           child: const Icon(Icons.add),
         ),
       ),
@@ -47,20 +41,12 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-StreamBuilder<List<Session>> _buildSessionList(
-    BuildContext context, AppDatabase database) {
-  return StreamBuilder(
-    stream: database.watchSessions(),
-    builder: (context, AsyncSnapshot<List<Session>> snapshot) {
-      final sessions = snapshot.data ?? [];
-
-      return ListView.builder(
-        itemCount: sessions.length,
-        itemBuilder: (_, index) {
-          final itemSession = sessions[index];
-          return _listCardWidget(context, itemSession);
-        },
-      );
+Widget _buildSessionList(BuildContext context) {
+  return ListView.builder(
+    itemCount: objectbox.store.box<Session>().getAll().length,
+    itemBuilder: (context, index) {
+      Session? itemSession = objectbox.store.box<Session>().getAll()[index];
+      return _listCardWidget(context, itemSession);
     },
   );
 }
@@ -99,7 +85,7 @@ Widget _listCardWidget(BuildContext context, Session session) {
                       "Distance : ${session.distance.toString()} m",
                       style: Theme.of(context).textTheme.bodySmall,
                     ),
-                    Text(DateFormat.yMd().format(session.dateSession),
+                    Text(DateFormat.yMd().format(session.date),
                         style: Theme.of(context).textTheme.bodySmall),
                   ],
                 ),

@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:mapa_flutter/ui/home.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
-import 'ui/mapPage.dart';
+import 'package:mapa/data/ObjectBox.dart';
+import 'package:mapa/ui/home.dart';
+import 'ui/mappage.dart';
 
-void main() {
-  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
-  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+late ObjectBox objectbox;
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  objectbox = await ObjectBox.create();
   runApp(const MyApp());
 }
 
@@ -24,7 +26,7 @@ class MyApp extends StatelessWidget {
       ),
       routes: {
         '/': (context) => const HomePage(title: 'Mapa'),
-        '/map': (context) => const LiveLocationPage(),
+        '/map': (context) => LiveLocationPage(),
       },
     );
   }
