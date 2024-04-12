@@ -1,6 +1,5 @@
-
-# Created by https://www.toptal.com/developers/gitignore/api/android,androidstudio,java
-# Edit at https://www.toptal.com/developers/gitignore?templates=android,androidstudio,java
+# Created by https://www.toptal.com/developers/gitignore/api/android,androidstudio,java,kotlin
+# Edit at https://www.toptal.com/developers/gitignore?templates=android,androidstudio,java,kotlin
 
 ### Android ###
 # Gradle files
@@ -23,6 +22,9 @@ output.json
 # IntelliJ
 *.iml
 .idea/
+misc.xml
+deploymentTargetDropDown.xml
+render.experimental.xml
 
 # Keystore files
 *.jks
@@ -64,6 +66,19 @@ gen-external-apklibs
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 replay_pid*
+
+### Kotlin ###
+# Compiled class file
+
+# Log file
+
+# BlueJ files
+
+# Mobile Tools for Java (J2ME)
+
+# Package Files #
+
+# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 
 ### AndroidStudio ###
 # Covers files to be ignored for android development using Android Studio.
@@ -149,15 +164,6 @@ obj/
 .idea/jarRepositories.xml
 .idea/navEditor.xml
 
-# OS-specific files
-.DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
-Thumbs.db
-
 # Legacy Eclipse project files
 .classpath
 .project
@@ -191,4 +197,4 @@ fabric.properties
 
 !/gradle/wrapper/gradle-wrapper.jar
 
-# End of https://www.toptal.com/developers/gitignore/api/android,androidstudio,java
+# End of https://www.toptal.com/developers/gitignore/api/android,androidstudio,java,kotlin
