@@ -16,10 +16,10 @@ This open-source project has the goal to be an alternative to Strava. Everyone i
 
 * Download the .apk file in the latest releases on your phone and open it. The app should download by itself.
 
-Mapa 2.0 roadmap
-- Change list element to card for better esthetic (sorry for the faults).
-- Change RoomDB to ObjectBox in case we want online sync in the future.
-- Change OSMdroid to [MapLibre]() for more features and more updates than OSMdroid. (Possibly road drawing)
+## Mapa 2.0 roadmap
+- ~~Change list element to card for better esthetic (sorry for the faults).~~
+- ~~Change RoomDB to ObjectBox in case we want online sync in the future.~~
+- Change OSMdroid to [MapLibre](https://maplibre.org/) for more features and more updates than OSMdroid. (Possibly road drawing)
 - More to comes when I get ideas.
 
 ## Help
