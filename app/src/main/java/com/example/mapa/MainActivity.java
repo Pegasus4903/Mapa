@@ -13,13 +13,10 @@ import android.os.Bundle;
 import android.os.StrictMode;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
-import android.transition.TransitionManager;
 import android.view.View;
-import android.view.ViewParent;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.Chronometer;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,7 +34,6 @@ import org.osmdroid.bonuspack.routing.OSRMRoadManager;
 import org.osmdroid.bonuspack.routing.Road;
 import org.osmdroid.bonuspack.routing.RoadManager;
 import org.osmdroid.config.Configuration;
-import org.osmdroid.library.BuildConfig;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
@@ -47,7 +43,6 @@ import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements LocationListener {
     private MapView map;
@@ -57,7 +52,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     private long timeWhenStopped;
     private ArrayList<GeoPoint> geoPoints;
     private RoadManager roadManager;
-    private RoomDB database;
+   // private RoomDB database;
     private int distanceRound;
 
     @Override
@@ -142,7 +137,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     }
 
     private void displayDialog() {
-        database = RoomDB.getInstance(this);
+        //database = RoomDB.getInstance(this);
         // create dialog
         final Dialog dialog=new Dialog(this);
         // set content view
@@ -173,7 +168,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                     session.setTime((int)timeWhenStopped);
                     session.setDateSession(new Date());
 
-                    database.sessionDao().insert(session);
+                    //database.sessionDao().insert(session);
 
                     startActivity(new Intent(getApplicationContext(), listSessionActivity.class));
                     finish();

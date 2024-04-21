@@ -17,7 +17,7 @@ import java.util.List;
 public class listeAdapter extends RecyclerView.Adapter<listeAdapter.ViewHolder> {
     private Context context;
     private List<Session> dataList;
-    private RoomDB database;
+    //private RoomDB database;
 
     public listeAdapter(@NonNull Context context, List<Session> dataList){
         this.context = context;
@@ -50,7 +50,7 @@ public class listeAdapter extends RecyclerView.Adapter<listeAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull final listeAdapter.ViewHolder holder, int position) {
         Session s = dataList.get(position);
-        database = RoomDB.getInstance(context);
+       // database = RoomDB.getInstance(context);
         holder.titleSessionText.setText(s.getTitle());
         holder.distanceSessionText.setText("Distance : " + String.valueOf(s.getDistance()));
         holder.dateSessionText.setText(s.getDateSession().toString());

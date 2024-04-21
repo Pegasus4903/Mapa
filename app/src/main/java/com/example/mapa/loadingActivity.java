@@ -23,6 +23,7 @@ public class loadingActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ObjectBox.init(this);
         setContentView(R.layout.activity_loading);
 
         requestPermissionsIfNecessary(new String[]{

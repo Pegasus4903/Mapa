@@ -1,33 +1,24 @@
 package com.example.mapa;
 
-import androidx.room.ColumnInfo;
-import androidx.room.Entity;
-import androidx.room.PrimaryKey;
-import androidx.room.TypeConverter;
 
-import java.text.DateFormat;
-import java.text.ParseException;
 import java.util.Date;
+
+import io.objectbox.annotation.Entity;
 
 @Entity
 public class Session {
-    @PrimaryKey(autoGenerate = true)
-    public int Id;
-
-    @ColumnInfo(name = "Title")
+    @io.objectbox.annotation.Id
+    public long Id;
     private String Title;
-    @ColumnInfo(name = "Distance")
     private int Distance;
-    @ColumnInfo(name = "Time")
     private int Time;
-    @ColumnInfo(name = "Date_Session")
     private Date DateSession;
 
-    public int getId() {
+    public long getId() {
         return Id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         Id = id;
     }
 

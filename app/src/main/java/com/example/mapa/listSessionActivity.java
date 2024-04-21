@@ -20,7 +20,7 @@ public class listSessionActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     List<Session> dataList = new ArrayList<>();
     LinearLayoutManager linearLayoutManager;
-    RoomDB database;
+    //RoomDB database;
     listeAdapter adapter;
     FloatingActionButton floatingButton;
 
@@ -32,9 +32,9 @@ public class listSessionActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.liste);
         floatingButton = findViewById(R.id.floatingButton);
 
-        database = RoomDB.getInstance(this);
+        //database = RoomDB.getInstance(this);
 
-        dataList = database.sessionDao().getAll();
+        //dataList = database.sessionDao().getAll();
 
         linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
