@@ -1,66 +1,92 @@
 package com.example.mapa;
 
-import android.Manifest;
-import android.annotation.SuppressLint;
-import android.app.Dialog;
-import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.os.StrictMode;
-import android.os.SystemClock;
-import androidx.preference.PreferenceManager;
+import android.os.PersistableBundle;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.Chronometer;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
-import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.app.ActivityCompat;
 
-import com.google.android.material.appbar.AppBarLayout;
+import com.mapbox.mapboxsdk.Mapbox;
+import com.mapbox.mapboxsdk.camera.CameraPosition;
+import com.mapbox.mapboxsdk.maps.MapView;
 
-import org.osmdroid.api.IMapController;
-import org.osmdroid.bonuspack.routing.OSRMRoadManager;
-import org.osmdroid.bonuspack.routing.Road;
-import org.osmdroid.bonuspack.routing.RoadManager;
-import org.osmdroid.config.Configuration;
-import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
-import org.osmdroid.util.GeoPoint;
-import org.osmdroid.views.MapView;
-import org.osmdroid.views.overlay.Polyline;
-import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
-import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
-
-import java.util.ArrayList;
-import java.util.Date;
-
-import io.objectbox.Box;
-
-public class MainActivity extends AppCompatActivity implements LocationListener {
+public class MainActivity extends AppCompatActivity{
     private MapView map;
-    private MyLocationNewOverlay mLocationOverlay;
+    //private MyLocationNewOverlay mLocationOverlay;
     private LocationManager lm;
     private boolean enablePolyline = false;
     private long timeWhenStopped;
-    private ArrayList<GeoPoint> geoPoints;
-    private RoadManager roadManager;
+    //private ArrayList<GeoPoint> geoPoints;
+    //private RoadManager roadManager;
     private int distanceRound;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Configuration.getInstance().load(getApplicationContext(),
+        // Init MapLibre
+        Mapbox.getInstance(this);
+
+        // Init layout view
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View rootView = inflater.inflate(R.layout.activity_main, null);
+        setContentView(rootView);
+
+        // Init the MapView
+        map = rootView.findViewById(R.id.mapView);
+        map.getMapAsync(map -> {
+            map.setStyle("https://demotiles.maplibre.org/style.json");
+            map.setCameraPosition(CameraPosition.DEFAULT);
+        });
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        map.onStart();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        map.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        map.onPause();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        map.onStop();
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        map.onLowMemory();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        map.onDestroy();
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState, @NonNull PersistableBundle outPersistentState) {
+        super.onSaveInstanceState(outState, outPersistentState);
+        map.onSaveInstanceState(outState);
+    }
+}
+/*        Configuration.getInstance().load(getApplicationContext(),
                 PreferenceManager.getDefaultSharedPreferences(getApplicationContext()));
         Configuration.getInstance().setUserAgentValue("MapaUserAgent/1.0");
         Configuration.getInstance().setDebugMode(true);
@@ -233,4 +259,4 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             textDistance.setText(String.format("%d m", distanceRound));
         }
     }
-}
+}*/

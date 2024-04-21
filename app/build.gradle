@@ -8,7 +8,7 @@ android {
 
     defaultConfig {
         applicationId "com.example.mapa"
-        minSdkVersion 19
+        minSdkVersion 21
         targetSdkVersion 34
         versionCode 1
         versionName "1.0"
@@ -34,13 +34,12 @@ dependencies {
 
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.11.0'
-    implementation 'org.osmdroid:osmdroid-android:6.1.18'
-    implementation 'com.github.MKergall:osmbonuspack:6.9.0'
     implementation "io.objectbox:objectbox-java:$objectboxVersion"
     annotationProcessor "io.objectbox:objectbox-processor:$objectboxVersion"
     implementation "io.objectbox:objectbox-android:$objectboxVersion"
     implementation 'com.android.support:multidex:1.0.3'
     implementation 'androidx.preference:preference:1.2.1'
+    implementation 'org.maplibre.gl:android-sdk:10.3.0'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
