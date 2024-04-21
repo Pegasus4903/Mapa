@@ -1,5 +1,6 @@
 package com.example.mapa;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,15 +18,15 @@ import java.util.List;
 public class listeAdapter extends RecyclerView.Adapter<listeAdapter.ViewHolder> {
     private Context context;
     private List<Session> dataList;
-    //private RoomDB database;
 
+    @SuppressLint("NotifyDataSetChanged")
     public listeAdapter(@NonNull Context context, List<Session> dataList){
         this.context = context;
         this.dataList = dataList;
         notifyDataSetChanged();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView titleSessionText;
         TextView distanceSessionText;
@@ -50,7 +51,6 @@ public class listeAdapter extends RecyclerView.Adapter<listeAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull final listeAdapter.ViewHolder holder, int position) {
         Session s = dataList.get(position);
-       // database = RoomDB.getInstance(context);
         holder.titleSessionText.setText(s.getTitle());
         holder.distanceSessionText.setText("Distance : " + String.valueOf(s.getDistance()));
         holder.dateSessionText.setText(s.getDateSession().toString());

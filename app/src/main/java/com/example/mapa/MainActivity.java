@@ -12,7 +12,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.os.SystemClock;
-import android.preference.PreferenceManager;
+import androidx.preference.PreferenceManager;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -44,6 +44,8 @@ import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 import java.util.ArrayList;
 import java.util.Date;
 
+import io.objectbox.Box;
+
 public class MainActivity extends AppCompatActivity implements LocationListener {
     private MapView map;
     private MyLocationNewOverlay mLocationOverlay;
@@ -52,7 +54,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     private long timeWhenStopped;
     private ArrayList<GeoPoint> geoPoints;
     private RoadManager roadManager;
-   // private RoomDB database;
     private int distanceRound;
 
     @Override
@@ -137,7 +138,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     }
 
     private void displayDialog() {
-        //database = RoomDB.getInstance(this);
+        Box<Session> sessionBox = ObjectBox.get().boxFor(Session.class);
         // create dialog
         final Dialog dialog=new Dialog(this);
         // set content view
@@ -168,7 +169,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                     session.setTime((int)timeWhenStopped);
                     session.setDateSession(new Date());
 
-                    //database.sessionDao().insert(session);
+                    sessionBox.put(session);
 
                     startActivity(new Intent(getApplicationContext(), listSessionActivity.class));
                     finish();

@@ -15,12 +15,13 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.objectbox.Box;
+
 public class listSessionActivity extends AppCompatActivity {
 
     RecyclerView recyclerView;
     List<Session> dataList = new ArrayList<>();
     LinearLayoutManager linearLayoutManager;
-    //RoomDB database;
     listeAdapter adapter;
     FloatingActionButton floatingButton;
 
@@ -32,9 +33,9 @@ public class listSessionActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.liste);
         floatingButton = findViewById(R.id.floatingButton);
 
-        //database = RoomDB.getInstance(this);
+        Box<Session> sessionBox = ObjectBox.get().boxFor(Session.class);
 
-        //dataList = database.sessionDao().getAll();
+        dataList = sessionBox.getAll();
 
         linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
