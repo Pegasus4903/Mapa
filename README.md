@@ -16,6 +16,12 @@ This open-source project has the goal to be an alternative to Strava. Everyone i
 
 * Download the .apk file in the latest releases on your phone and open it. The app should download by itself.
 
+## Mapa 2.0 roadmap
+- ~~Change list element to card for better esthetic (sorry for the faults).~~
+- ~~Change RoomDB to ObjectBox in case we want online sync in the future.~~
+- Change OSMdroid to [MapLibre](https://maplibre.org/) for more features and more updates than OSMdroid. (Possibly road drawing)
+- More to comes when I get ideas.
+
 ## Help
 
 Please create an issue in the respective tab if you have some issue with the app so it can be fixed right away.
@@ -42,4 +48,3 @@ Inspiration, code snippets, etc.
 * [Stack Overflow (always useful !)](https://stackoverflow.com/)
 * [Strava](https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=&cad=rja&uact=8&ved=2ahUKEwjOo5n26uT1AhVuS98KHXy6BVEQFnoECBsQAQ&url=https%3A%2F%2Fwww.strava.com%2F%3Fhl%3Dfr&usg=AOvVaw2ji2cLtbHcID_y3vxFpcYJ)
 * [GR4Vity instagram (thanks to him for the logo)](https://www.instagram.com/ludovick_miclette/?hl=fr-ca)
-
