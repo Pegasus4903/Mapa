@@ -1,5 +1,6 @@
 package com.example.mapa;
 
+import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.PersistableBundle;
@@ -11,7 +12,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.camera.CameraPosition;
+import com.mapbox.mapboxsdk.location.LocationComponent;
+import com.mapbox.mapboxsdk.location.permissions.PermissionsManager;
 import com.mapbox.mapboxsdk.maps.MapView;
+import com.mapbox.mapboxsdk.maps.MapboxMap;
 
 public class MainActivity extends AppCompatActivity{
     private MapView map;
@@ -22,6 +26,11 @@ public class MainActivity extends AppCompatActivity{
     //private ArrayList<GeoPoint> geoPoints;
     //private RoadManager roadManager;
     private int distanceRound;
+
+    private Location lastLocation;
+    private PermissionsManager permissionsManager;
+    private LocationComponent locationComponent = null;
+    private MapboxMap mapboxMap;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -37,10 +46,6 @@ public class MainActivity extends AppCompatActivity{
 
         // Init the MapView
         map = rootView.findViewById(R.id.mapView);
-        map.getMapAsync(map -> {
-            map.setStyle("https://demotiles.maplibre.org/style.json");
-            map.setCameraPosition(CameraPosition.DEFAULT);
-        });
 
     }
 
